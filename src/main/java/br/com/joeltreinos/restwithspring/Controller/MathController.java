@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.joeltreinos.restwithspring.Exceptions.UnsupportedMathOperationException;
+
 @RestController
 public class MathController {
     private static final String template = "Olá %s";
@@ -19,7 +21,7 @@ public class MathController {
         double primeiro;
         double segundo;
         if(!isNumeric(numeroUm) || !isNumeric(numeroDois)){
-            throw new Exception();
+            throw new UnsupportedMathOperationException("Por favor envie um número válido");
         }
         primeiro = convertToDouble(numeroUm);
         segundo = convertToDouble(numeroDois);
