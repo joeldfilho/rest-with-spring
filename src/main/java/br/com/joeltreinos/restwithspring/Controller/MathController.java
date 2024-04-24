@@ -1,44 +1,49 @@
 package br.com.joeltreinos.restwithspring.Controller;
 
-import java.util.concurrent.atomic.AtomicLong;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.joeltreinos.restwithspring.Exceptions.UnsupportedMathOperationException;
+import br.com.joeltreinos.restwithspring.Service.SimpleMathService;
 
 @RestController
 public class MathController {
-    private static final String template = "Olá %s";
-    private final AtomicLong counter = new AtomicLong();
 
-    @RequestMapping("/sum")
-    public Double sum(
+    @Autowired
+    private SimpleMathService simpleMathService;
+
+    @RequestMapping(path="/soma",method = RequestMethod.POST)
+    public Double soma(
         @RequestParam(value = "numeroUm") String numeroUm,
         @RequestParam(value = "numeroDois") String numeroDois
     ) throws Exception{
-        double primeiro;
-        double segundo;
-        if(!isNumeric(numeroUm) || !isNumeric(numeroDois)){
-            throw new UnsupportedMathOperationException("Por favor envie um número válido");
-        }
-        primeiro = convertToDouble(numeroUm);
-        segundo = convertToDouble(numeroDois);
-        return primeiro + segundo;
+        return simpleMathService.soma(numeroUm, numeroDois);
     }
 
-    private boolean isNumeric(String numero) {
-        if(numero == null) return false;
-        String number = numero.replace(',', '.');
-        return number.matches("[-+]?[0-9]*\\.?[0-9]+");
+    @RequestMapping(path="/subtrai",method = RequestMethod.POST)
+    public Double subtrai(
+        @RequestParam(value = "numeroUm") String numeroUm,
+        @RequestParam(value = "numeroDois") String numeroDois
+    ) throws Exception{
+        return simpleMathService.subtrai(numeroUm, numeroDois);
     }
 
-    private Double convertToDouble(String number){
-        if(number == null) return 0D;
-        String newNumber = number.replace(',', '.');
-        if (isNumeric(newNumber)) return Double.parseDouble(newNumber);
-        return 0D;
-
+    @RequestMapping(path="/multiplica",method = RequestMethod.POST)
+    public Double multiplica(
+        @RequestParam(value = "numeroUm") String numeroUm,
+        @RequestParam(value = "numeroDois") String numeroDois
+    ) throws Exception{
+        return simpleMathService.multiplica(numeroUm, numeroDois);
     }
+
+    @RequestMapping(path="/divide",method = RequestMethod.POST)
+    public Double divide(
+        @RequestParam(value = "numeroUm") String numeroUm,
+        @RequestParam(value = "numeroDois") String numeroDois
+    ) throws Exception{
+        return simpleMathService.divide(numeroUm, numeroDois);
+    }
+
 }
